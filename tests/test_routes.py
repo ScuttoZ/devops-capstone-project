@@ -171,7 +171,7 @@ class TestAccountService(TestCase):
         resp = self.client.delete(BASE_URL)
         self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    def test_environ_overrides(self):
+    def test_environ_headers(self):
         resp = self.client.get("/", environ_overrides=HTTPS_ENVIRON)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         headers = {
@@ -183,4 +183,12 @@ class TestAccountService(TestCase):
         for key, value in headers.items():
             self.assertEqual(resp.headers.get(key), value)
 
+    def test_ACAO_header(self):
+        resp = self.client.get("/", environ_overrides=HTTPS_ENVIRON)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        header = {
+            'Access-Control-Allow-Origin': '*'
+        }
+        for key, value in header.items():
+            self.assertEqual(resp.headers.get(key), value)
         
